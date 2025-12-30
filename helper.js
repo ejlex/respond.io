@@ -37,7 +37,7 @@ export const transformData = (rawData) => {
     let x = Math.max(preferredX, levelNextX[level] || 0);
 
     // 3. Commit this position to the tracker for this level
-    levelNextX[level] = x + 400; // 400px spacing for clarity
+    levelNextX[level] = x + 350; // 400px spacing for clarity
 
     // 4. Place Node & Edges
     const rawNode = nodesById[id];
@@ -68,10 +68,11 @@ export const transformData = (rawData) => {
         id: `e${id}->${childId}`,
         source: id,
         target: childId,
+        type: "smoothstep",
       });
     });
   };
 
-  if (rootId) positionNode(rootId, 0, 400); // Start root at a comfortable X
+  if (rootId) positionNode(rootId, 0, 350); // Start root at a comfortable X
   return { nodes: finalNodes, edges: finalEdges };
 };
