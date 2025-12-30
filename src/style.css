@@ -34,3 +34,7 @@
     background-color: #f9f9f9;
   }
 }
+
+.vue-flow__node-default {
+  border-radius: 10px;
+}

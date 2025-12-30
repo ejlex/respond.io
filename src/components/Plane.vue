@@ -2,9 +2,11 @@
 import { ref, watch } from "vue";
 import { VueFlow } from "@vue-flow/core";
 import { useQuery } from "@tanstack/vue-query";
-import SpecialNode from "./SpecialNode.vue";
-// import SpecialEdge from "./SpecialEdge.vue";
 import TriggerNode from "./Node/TriggerNode.vue";
+import DateTimeNode from "./Node/DateTimeNode.vue";
+import ConnectorNode from "./Node/ConnectorNode.vue";
+import SendMessageNode from "./Node/SendMessageNode.vue";
+import AddCommentNode from "./Node/AddCommentNode.vue";
 import { transformData } from "../../helper";
 
 const nodes = ref([]);
@@ -31,17 +33,17 @@ watch(data, () => {
       <template #node-trigger="triggerNodeProps">
         <TriggerNode v-bind="triggerNodeProps" />
       </template>
-      <template #node-dateTime="specialNodeProps">
-        <SpecialNode v-bind="specialNodeProps" />
+      <template #node-dateTime="dateTimeNodeProps">
+        <DateTimeNode v-bind="dateTimeNodeProps" />
       </template>
-      <template #node-dateTimeConnector="specialNodeProps">
-        <SpecialNode v-bind="specialNodeProps" />
+      <template #node-dateTimeConnector="dateTimeConnectorNodeProps">
+        <ConnectorNode v-bind="dateTimeConnectorNodeProps" />
       </template>
-      <template #node-sendMessage="specialNodeProps">
-        <SpecialNode v-bind="specialNodeProps" />
+      <template #node-sendMessage="sendMessageNodeProps">
+        <SendMessageNode v-bind="sendMessageNodeProps" />
       </template>
-      <template #node-addComment="specialNodeProps">
-        <SpecialNode v-bind="specialNodeProps" />
+      <template #node-addComment="addCommentNodeProps">
+        <AddCommentNode v-bind="addCommentNodeProps" />
       </template>
       <!-- bind your custom edge type to a component by using slots, slot names are always `edge-<type>` -->
       <!-- <template #edge-special="specialEdgeProps">
