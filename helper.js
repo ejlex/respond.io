@@ -3,20 +3,19 @@ export const transformData = (rawData) => {
   const childrenMap = {};
   let rootId = null;
 
-  // 1. Map data for quick access
+  // 1. Map data & identify root
   rawData.forEach((item) => {
     const id = item.id.toString();
     nodesById[id] = item;
-    if (item.parentId === -1) rootId = id;
+    if (item.parentId === -1 || item.parentId === null) rootId = id;
 
-    // Direct parent relationship
     if (item.parentId && item.parentId !== -1) {
       const pid = item.parentId.toString();
       childrenMap[pid] = childrenMap[pid] || [];
       if (!childrenMap[pid].includes(id)) childrenMap[pid].push(id);
     }
 
-    // Explicit connectors (for dateTime nodes)
+    // Support for explicit connectors/dateTime nodes
     if (item.data?.connectors) {
       childrenMap[id] = childrenMap[id] || [];
       item.data.connectors.forEach((cId) => {
@@ -28,39 +27,42 @@ export const transformData = (rawData) => {
 
   const finalNodes = [];
   const finalEdges = [];
-  const levelNextX = {}; // Tracks the next available X for each level to avoid overlaps
+  const levelNextX = {}; // Prevents different branches from overlapping
 
-  // 2. Recursive function to calculate positions
-  const positionNode = (id, level = 0) => {
+  const positionNode = (id, level = 0, preferredX = 0) => {
     const children = childrenMap[id] || [];
-    let x;
 
-    if (children.length === 0) {
-      // Leaf node: Place at the next available horizontal slot for this level
-      x = levelNextX[level] || 0;
-      levelNextX[level] = x + 300;
-    } else {
-      // Internal node: Position children first
-      const childPositions = children.map((childId) =>
-        positionNode(childId, level + 1)
-      );
+    // 2. Logic: Attempt to use the preferredX (from parent),
+    // but ensure we don't overlap existing nodes at this depth.
+    let x = Math.max(preferredX, levelNextX[level] || 0);
 
-      // ALIGN MIDDLE: Average of first and last child's X position
-      const firstChildX = childPositions[0];
-      const lastChildX = childPositions[childPositions.length - 1];
-      x = (firstChildX + lastChildX) / 2;
+    // 3. Commit this position to the tracker for this level
+    levelNextX[level] = x + 400; // 400px spacing for clarity
 
-      // Safety check: Ensure parent doesn't overlap with existing nodes at its own level
-      const minX = levelNextX[level] || 0;
-      if (x < minX) {
-        // Shift all children to maintain center alignment
-        // (Simplified for this logic: just push the parent to the available slot)
-        x = minX;
-      }
-      levelNextX[level] = Math.max(levelNextX[level] || 0, x + 300);
+    // 4. Place Node & Edges
+    const rawNode = nodesById[id];
+    finalNodes.push({
+      id,
+      type: rawNode.type,
+      position: { x, y: level * 180 },
+      data: { title: rawNode.name || id, ...rawNode.data },
+    });
+
+    // 5. Recursive child placement
+    if (children.length === 1) {
+      // SINGLE CHILD: Force the child to use the exact same X as this parent
+      positionNode(children[0], level + 1, x);
+    } else if (children.length > 1) {
+      // MULTIPLE CHILDREN: Spread them out centered under the parent
+      const totalWidth = (children.length - 1) * 350;
+      const startX = x - totalWidth / 2;
+
+      children.forEach((childId, index) => {
+        const childTargetX = startX + index * 350;
+        positionNode(childId, level + 1, childTargetX);
+      });
     }
 
-    // Add Edges
     children.forEach((childId) => {
       finalEdges.push({
         id: `e${id}->${childId}`,
@@ -68,20 +70,8 @@ export const transformData = (rawData) => {
         target: childId,
       });
     });
-
-    // Add Node
-    const rawNode = nodesById[id];
-    finalNodes.push({
-      id,
-      type: rawNode.type,
-      position: { x, y: level * 150 },
-      data: { title: rawNode.name || id, ...rawNode.data },
-    });
-
-    return x;
   };
 
-  positionNode(rootId);
-  console.log(finalEdges);
+  if (rootId) positionNode(rootId, 0, 400); // Start root at a comfortable X
   return { nodes: finalNodes, edges: finalEdges };
 };
