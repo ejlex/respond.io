@@ -1,6 +1,8 @@
 import { createApp } from "vue";
 import { createPinia } from "pinia";
 import { VueQueryPlugin } from "@tanstack/vue-query";
+import PrimeVue from "primevue/config";
+import Aura from "@primevue/themes/aura";
 import App from "./App.vue";
 import router from "./router";
 import "./style.css";
@@ -21,6 +23,11 @@ const vueQueryPluginOptions = {
   },
 };
 
+app.use(PrimeVue, {
+  theme: {
+    preset: Aura,
+  },
+});
 app.use(VueQueryPlugin, vueQueryPluginOptions);
 app.use(pinia);
 app.use(router);
