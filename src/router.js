@@ -1,14 +1,12 @@
-import { createWebHistory, createRouter } from 'vue-router'
+import { createWebHistory, createRouter } from "vue-router";
 
-import Plane from './components/Plane.vue'
+import Canvas from "./components/Canvas.vue";
 
-const routes = [
-  { path: '/', component: Plane },
-]
+const routes = [{ path: "/", component: Canvas }];
 
 const router = createRouter({
   history: createWebHistory(),
   routes,
-})
+});
 
-export default router
+export default router;
