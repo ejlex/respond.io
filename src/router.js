@@ -1,9 +1,9 @@
 import { createWebHistory, createRouter } from 'vue-router'
 
-import HelloWorld from './components/HelloWorld.vue'
+import Plane from './components/Plane.vue'
 
 const routes = [
-  { path: '/', component: HelloWorld },
+  { path: '/', component: Plane },
 ]
 
 const router = createRouter({
