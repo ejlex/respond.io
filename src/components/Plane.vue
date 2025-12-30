@@ -22,18 +22,27 @@ const nodes = ref([
   // an input node, specified by using `type: 'input'`
   {
     id: "1",
-    type: "input",
+    type: "special",
     position: { x: 250, y: 5 },
     // all nodes can have a data object containing any data you want to pass to the node
     // a label can property can be used for default nodes
-    data: { label: "Node 1" },
+    data: {
+      label: "Node 1",
+      title: "Input Node",
+      description: "This is an input node",
+    },
   },
 
   // default node, you can omit `type: 'default'` as it's the fallback type
   {
     id: "2",
+    type: "special",
     position: { x: 100, y: 100 },
-    data: { label: "Node 2" },
+    data: {
+      label: "Node 2",
+      title: "Default Node",
+      description: "This is a default node",
+    },
   },
 
   // An output node, specified by using `type: 'output'`
@@ -41,7 +50,11 @@ const nodes = ref([
     id: "3",
     type: "output",
     position: { x: 400, y: 200 },
-    data: { label: "Node 3" },
+    data: {
+      label: "Node 3",
+      title: "Output Node",
+      description: "This is an output node",
+    },
   },
 
   // this is a custom node
@@ -50,10 +63,14 @@ const nodes = ref([
   {
     id: "4",
     type: "special", // <-- this is the custom node type name
-    position: { x: 400, y: 200 },
+    title: "Special Node",
+    description: "This is a special node",
+    position: { x: 400, y: 100 },
     data: {
       label: "Node 4",
       hello: "world",
+      title: "Special Node",
+      description: "This is a special node",
     },
   },
 ]);
@@ -94,7 +111,7 @@ const edges = ref([
 
 <template>
   <div class="flow-container">
-    <VueFlow :nodes="data" :edges="edges">
+    <VueFlow :nodes="nodes" :edges="edges">
       <!-- bind your custom node type to a component by using slots, slot names are always `node-<type>` -->
       <template #node-special="specialNodeProps">
         <SpecialNode v-bind="specialNodeProps" />

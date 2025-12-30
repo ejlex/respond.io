@@ -7,7 +7,13 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+  data: {
+    type: Object,
+    required: false,
+  },
 });
+
+console.log(props);
 
 const x = computed(() => `${Math.round(props.position.x)}px`);
 const y = computed(() => `${Math.round(props.position.y)}px`);
@@ -15,9 +21,10 @@ const y = computed(() => `${Math.round(props.position.y)}px`);
 
 <template>
   <div class="vue-flow__node-default">
-    <div>{{ props?.label }}</div>
-
-    <div>{{ x }} {{ y }}</div>
+    <div class="font-bold pb-1 border-b border-gray-500">
+      {{ data?.title }}
+    </div>
+    <div class="text-gray-500">{{ data?.description }}</div>
 
     <Handle type="source" :position="Position.Bottom" />
   </div>
