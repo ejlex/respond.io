@@ -20,11 +20,13 @@ const y = computed(() => `${Math.round(props.position.y)}px`);
 </script>
 
 <template>
+  <Handle type="target" :position="Position.Top" />
   <div class="vue-flow__node-default">
     <div class="font-bold pb-1 border-b border-gray-500">
       {{ data?.title }}
     </div>
     <div class="text-gray-500">{{ data?.description }}</div>
+    <div class="">{{ x }} {{ y }}</div>
 
     <Handle type="source" :position="Position.Bottom" />
   </div>
