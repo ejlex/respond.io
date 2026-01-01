@@ -10,6 +10,7 @@ import ConfirmDialog from "primevue/confirmdialog";
 import { useConfirm } from "primevue/useconfirm";
 import SendMessageDetail from "./details/SendMessageDetail.vue";
 import AddCommentDetail from "./details/AddCommentDetail.vue";
+import DateTimeDetail from "./details/DateTimeDetail.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -25,6 +26,8 @@ const title = ref("");
 const description = ref("");
 const payload = ref({});
 const comment = ref("");
+const times = ref([]);
+const timezone = ref("");
 
 watch(
   node,
@@ -36,6 +39,10 @@ watch(
         ? JSON.parse(JSON.stringify(newNode.data.payload))
         : [];
       comment.value = newNode.data.comment || "";
+      times.value = newNode.data.times
+        ? JSON.parse(JSON.stringify(newNode.data.times))
+        : [];
+      timezone.value = newNode.data.timezone || "UTC";
     }
   },
   { immediate: true }
@@ -48,6 +55,8 @@ const save = () => {
       description: description.value,
       payload: payload.value,
       comment: comment.value,
+      times: times.value,
+      timezone: timezone.value,
     });
     visible.value = false;
   }
@@ -111,6 +120,13 @@ watch(visible, (val) => {
 
       <!-- Add Comment Node Specific Fields -->
       <AddCommentDetail v-if="node.type === 'addComment'" v-model="comment" />
+
+      <!-- Date Time Node Specific Fields -->
+      <DateTimeDetail
+        v-if="node.type === 'dateTime'"
+        v-model:times="times"
+        v-model:timezone="timezone"
+      />
 
       <div class="mt-4 flex gap-2">
         <Button label="Save" @click="save" fluid />
