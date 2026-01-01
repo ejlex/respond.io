@@ -7,10 +7,14 @@ export const useCanvasStore = defineStore("canvas", () => {
   const nodes = ref([]);
   const edges = ref([]);
 
+  console.log(import.meta.env.VITE_API_BASE_URL);
   const { data } = useQuery({
     queryKey: ["assessments"],
     queryFn: () =>
-      fetch(VITE_API_BASE_URL + "/candidate-assessments/payload.json")
+      fetch(
+        import.meta.env.VITE_API_BASE_URL +
+          "/candidate-assessments/payload.json"
+      )
         .then((response) => response.json())
         .catch((error) => console.error(error)),
   });
