@@ -38,3 +38,8 @@
 .vue-flow__node-default {
   border-radius: 10px;
 }
+.selectable.selected {
+  .vue-flow__node-default {
+    border-width: 3px;
+  }
+}

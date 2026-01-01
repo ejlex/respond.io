@@ -117,7 +117,10 @@ const deleteSelected = () => {
 </script>
 
 <template>
-  <Panel position="top-left" class="p-2 rounded shadow-md border flex gap-2">
+  <Panel
+    position="top-left"
+    class="bg-gray-500 p-2 rounded shadow-md flex gap-2"
+  >
     <Button @click="reset" severity="contrast" size="small">
       <RotateCcw class="w-5 h-5" /> Reset
     </Button>
