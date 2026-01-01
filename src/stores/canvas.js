@@ -7,7 +7,6 @@ export const useCanvasStore = defineStore("canvas", () => {
   const nodes = ref([]);
   const edges = ref([]);
 
-  console.log(import.meta.env.VITE_API_BASE_URL);
   const { data } = useQuery({
     queryKey: ["assessments"],
     queryFn: () =>

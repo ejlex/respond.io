@@ -22,7 +22,7 @@ function onNodeClick({ node }) {
 <template>
   <div class="flow-container dotted-background">
     <VueFlow :nodes="nodes" :edges="edges" @node-click="onNodeClick">
-      <Background pattern-color="#aaa" :gap="16" />
+      <Background :gap="16" />
 
       <template #node-trigger="triggerNodeProps">
         <TriggerNode v-bind="triggerNodeProps" />

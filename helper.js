@@ -45,7 +45,7 @@ export const transformData = (rawData) => {
       id,
       type: rawNode.type,
       position: { x, y: level * 180 },
-      data: { title: rawNode.name || id, ...rawNode.data },
+      data: { title: rawNode.name, ...rawNode.data },
     });
 
     // 5. Recursive child placement

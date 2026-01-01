@@ -19,9 +19,9 @@ const props = defineProps({
     <Handle type="target" :position="Position.Top" />
     <div class="flex items-center font-bold pb-1 border-b border-gray-500">
       <Calendar1 class="w-4 h-4 ml-2 mr-2" />
-      Business Hours
+      {{ data?.title }}
     </div>
-    <div class="text-gray-500">Business Hours {{ data?.timezone }}</div>
+    <div class="text-gray-500 pt-1">{{ data?.title }} {{ data?.timezone }}</div>
 
     <Handle type="source" :position="Position.Bottom" />
   </div>

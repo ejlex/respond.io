@@ -19,9 +19,9 @@ const props = defineProps({
     <Handle type="target" :position="Position.Top" />
     <div class="flex items-center font-bold pb-1 border-b border-gray-500">
       <MessageSquareMore class="w-4 h-4 ml-2 mr-2" />
-      Add Comment
+      {{ data?.title }}
     </div>
-    <div class="text-gray-500 line-clamp-3">{{ data?.comment }}</div>
+    <div class="text-gray-500 line-clamp-3 pt-1">{{ data?.comment }}</div>
 
     <Handle type="source" :position="Position.Bottom" />
   </div>
