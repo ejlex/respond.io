@@ -23,6 +23,16 @@ function onNodeClick({ node }) {
 }
 
 function onConnect(params) {
+  const findEdge = edges.value.find(
+    (e) =>
+      e.source === params.source &&
+      e.target === params.target &&
+      e.sourceHandle === params.sourceHandle &&
+      e.targetHandle === params.targetHandle
+  );
+
+  if (findEdge) return;
+
   store.addEdge({ ...params, type: "smoothstep" });
 }
 

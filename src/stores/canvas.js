@@ -31,7 +31,15 @@ export const useCanvasStore = defineStore("canvas", () => {
   }
 
   function addEdge(edge) {
-    edges.value = [...edges.value, edge];
+    edges.value = [
+      ...edges.value,
+      {
+        id: `e${edge.source}->${edge.target}`,
+        source: edge.source,
+        target: edge.target,
+        type: "smoothstep",
+      },
+    ];
   }
 
   function reset(newData) {
