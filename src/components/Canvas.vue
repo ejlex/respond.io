@@ -15,6 +15,7 @@ const { nodes, edges } = storeToRefs(store);
 const router = useRouter();
 
 function onNodeClick({ node }) {
+  if (node.type === "dateTimeConnector") return;
   router.push({ name: "node-details", params: { id: node.id } });
 }
 </script>
