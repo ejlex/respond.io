@@ -7,14 +7,12 @@ import InputText from "primevue/inputtext";
 import Textarea from "primevue/textarea";
 import Select from "primevue/select";
 import Drawer from "primevue/drawer";
-import SendMessageDetail from "./details/SendMessageDetail.vue";
-import AddCommentDetail from "./details/AddCommentDetail.vue";
 import DateTimeDetail from "./details/DateTimeDetail.vue";
-import { Plus, RotateCcw } from "lucide-vue-next";
+import { Plus, RotateCcw, Trash2 } from "lucide-vue-next";
 import ConfirmDialog from "primevue/confirmdialog";
 import { useConfirm } from "primevue/useconfirm";
 
-const { viewport } = useVueFlow();
+const { viewport, getSelectedElements } = useVueFlow();
 const store = useCanvasStore();
 const confirm = useConfirm();
 
@@ -85,15 +83,46 @@ const reset = () => {
     },
   });
 };
+
+const deleteSelected = () => {
+  const selected = getSelectedElements.value;
+  if (!selected || selected.length === 0) return;
+
+  confirm.require({
+    message: `Are you sure you want to delete ${selected.length} selected item(s)?`,
+    header: "Delete Confirmation",
+    rejectProps: {
+      label: "Cancel",
+      severity: "secondary",
+      outlined: true,
+    },
+    acceptProps: {
+      label: "Delete",
+      severity: "danger",
+    },
+    accept: () => {
+      selected.forEach((el) => {
+        if (el.source && el.target) {
+          store.removeEdge(el.id);
+        } else {
+          store.removeNode(el.id);
+        }
+      });
+    },
+  });
+};
 </script>
 
 <template>
   <Panel position="top-left" class="p-2 rounded shadow-md border flex gap-2">
     <Button @click="reset" severity="contrast" size="small">
-      <RotateCcw class="w-4 h-4" /> Reset
+      <RotateCcw class="w-5 h-5" /> Reset
+    </Button>
+    <Button @click="deleteSelected" severity="danger" size="small">
+      <Trash2 class="w-5 h-5" /> Delete
     </Button>
     <Button @click="openDrawer" size="small">
-      <Plus class="w-4 h-4" /> Add New Node
+      <Plus class="w-5 h-5" /> Add New Node
     </Button>
   </Panel>
 

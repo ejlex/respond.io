@@ -30,6 +30,10 @@ export const useCanvasStore = defineStore("canvas", () => {
     edges.value = newEdges;
   }
 
+  function addEdge(edge) {
+    edges.value = [...edges.value, edge];
+  }
+
   function reset(newData) {
     const sourceData = newData || data.value;
     if (sourceData) {
@@ -50,6 +54,10 @@ export const useCanvasStore = defineStore("canvas", () => {
   function removeNode(id) {
     nodes.value = nodes.value.filter((n) => n.id !== id);
     edges.value = edges.value.filter((e) => e.source !== id && e.target !== id);
+  }
+
+  function removeEdge(id) {
+    edges.value = edges.value.filter((e) => e.id !== id);
   }
 
   function log() {
@@ -74,8 +82,10 @@ export const useCanvasStore = defineStore("canvas", () => {
     reset,
     updateNodeData,
     removeNode,
+    removeEdge,
     findNodeById,
     addNode,
+    addEdge,
     log,
   };
 });

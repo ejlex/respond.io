@@ -19,11 +19,20 @@ function onNodeClick({ node }) {
   if (node.type === "dateTimeConnector") return;
   router.push({ name: "node-details", params: { id: node.id } });
 }
+
+function onConnect(params) {
+  store.addEdge({ ...params, type: "smoothstep" });
+}
 </script>
 
 <template>
   <div class="flow-container dotted-background">
-    <VueFlow :nodes="nodes" :edges="edges" @node-click="onNodeClick">
+    <VueFlow
+      :nodes="nodes"
+      :edges="edges"
+      @node-click="onNodeClick"
+      @connect="onConnect"
+    >
       <Background :gap="16" />
 
       <template #node-trigger="triggerNodeProps">
