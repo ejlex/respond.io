@@ -7,12 +7,14 @@ import InputText from "primevue/inputtext";
 import Textarea from "primevue/textarea";
 import Select from "primevue/select";
 import Drawer from "primevue/drawer";
+import SendMessageDetail from "./details/SendMessageDetail.vue";
+import AddCommentDetail from "./details/AddCommentDetail.vue";
 import DateTimeDetail from "./details/DateTimeDetail.vue";
 import { Plus, RotateCcw, Trash2 } from "lucide-vue-next";
 import ConfirmDialog from "primevue/confirmdialog";
 import { useConfirm } from "primevue/useconfirm";
 
-const { viewport, getSelectedElements } = useVueFlow();
+const { viewport, getSelectedElements, fitView } = useVueFlow();
 const store = useCanvasStore();
 const confirm = useConfirm();
 
@@ -80,6 +82,7 @@ const reset = () => {
     },
     accept: () => {
       store.reset();
+      fitView();
     },
   });
 };

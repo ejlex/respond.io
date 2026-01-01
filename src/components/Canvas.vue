@@ -1,4 +1,5 @@
 <script setup>
+import { ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
 import { VueFlow } from "@vue-flow/core";
@@ -14,6 +15,7 @@ import NodeCreator from "./NodeCreator.vue";
 const store = useCanvasStore();
 const { nodes, edges } = storeToRefs(store);
 const router = useRouter();
+const vueFlowInstance = ref(null);
 
 function onNodeClick({ node }) {
   if (node.type === "dateTimeConnector") return;
@@ -23,6 +25,25 @@ function onNodeClick({ node }) {
 function onConnect(params) {
   store.addEdge({ ...params, type: "smoothstep" });
 }
+
+function onPaneReady(instance) {
+  vueFlowInstance.value = instance;
+  if (nodes.value.length > 0) {
+    instance.fitView();
+  }
+}
+
+watch(
+  () => nodes.value.length,
+  (count) => {
+    if (count > 0 && vueFlowInstance.value) {
+      setTimeout(() => {
+        vueFlowInstance.value.fitView();
+      }, 50);
+    }
+  },
+  { once: true }
+);
 </script>
 
 <template>
@@ -32,6 +53,8 @@ function onConnect(params) {
       :edges="edges"
       @node-click="onNodeClick"
       @connect="onConnect"
+      @pane-ready="onPaneReady"
+      fit-view-on-init
     >
       <Background :gap="16" />
 
