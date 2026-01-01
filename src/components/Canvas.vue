@@ -2,7 +2,7 @@
 import { ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
-import { VueFlow } from "@vue-flow/core";
+import { VueFlow, useVueFlow, useKeyPress } from "@vue-flow/core";
 import { Background } from "@vue-flow/background";
 import { useCanvasStore } from "../stores/canvas";
 import TriggerNode from "./Node/TriggerNode.vue";
@@ -16,6 +16,7 @@ const store = useCanvasStore();
 const { nodes, edges } = storeToRefs(store);
 const router = useRouter();
 const vueFlowInstance = ref(null);
+const { getSelectedNodes, getSelectedEdges } = useVueFlow();
 
 function onNodeClick({ node }) {
   if (node.type === "dateTimeConnector") return;
@@ -43,6 +44,49 @@ function onPaneReady(instance) {
   }
 }
 
+const isUp = useKeyPress("ArrowUp");
+const isDown = useKeyPress("ArrowDown");
+const isLeft = useKeyPress("ArrowLeft");
+const isRight = useKeyPress("ArrowRight");
+const isShift = useKeyPress("Shift");
+
+function moveNodes(xOffset, yOffset) {
+  const nodes = getSelectedNodes.value;
+  if (!nodes.length) return;
+  const moveStep = isShift.value ? 10 : 1;
+
+  nodes.forEach((node) => {
+    node.position = {
+      x: node.position.x + xOffset * moveStep,
+      y: node.position.y + yOffset * moveStep,
+    };
+  });
+}
+
+watch(isUp, (v) => v && moveNodes(0, -1));
+watch(isDown, (v) => v && moveNodes(0, 1));
+watch(isLeft, (v) => v && moveNodes(-1, 0));
+watch(isRight, (v) => v && moveNodes(1, 0));
+
+const isEnter = useKeyPress("Enter");
+const isDelete = useKeyPress("Delete");
+
+watch(isEnter, (v) => {
+  if (v && getSelectedNodes.value.length > 0) {
+    const node = getSelectedNodes.value[0];
+    if (node.type !== "dateTimeConnector") {
+      router.push({ name: "node-details", params: { id: node.id } });
+    }
+  }
+});
+
+watch(isDelete, (v) => {
+  if (v) {
+    getSelectedNodes.value.forEach((n) => store.removeNode(n.id));
+    getSelectedEdges.value.forEach((e) => store.removeEdge(e.id));
+  }
+});
+
 watch(
   () => nodes.value.length,
   (count) => {
@@ -57,7 +101,7 @@ watch(
 </script>
 
 <template>
-  <div class="flow-container dotted-background">
+  <div class="flow-container dotted-background" aria-label="Workflow Diagram">
     <VueFlow
       :nodes="nodes"
       :edges="edges"
@@ -65,6 +109,10 @@ watch(
       @connect="onConnect"
       @pane-ready="onPaneReady"
       fit-view-on-init
+      :keyboard-shortcuts="true"
+      :selection-key-code="'Shift'"
+      :multi-selection-key-code="'Control'"
+      aria-live="polite"
     >
       <Background :gap="16" />
 
@@ -101,5 +149,11 @@ watch(
 .flow-container {
   width: 100%;
   height: 100%;
+}
+
+/* Always provide a clear focus ring for accessibility */
+.accessible-node:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 4px;
 }
 </style>
