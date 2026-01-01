@@ -1,4 +1,5 @@
 <script setup>
+import { useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
 import { VueFlow } from "@vue-flow/core";
 import { Background } from "@vue-flow/background";
@@ -11,11 +12,16 @@ import SendMessageNode from "./Node/SendMessageNode.vue";
 
 const store = useCanvasStore();
 const { nodes, edges } = storeToRefs(store);
+const router = useRouter();
+
+function onNodeClick({ node }) {
+  router.push({ name: "node-details", params: { id: node.id } });
+}
 </script>
 
 <template>
   <div class="flow-container dotted-background">
-    <VueFlow :nodes="nodes" :edges="edges">
+    <VueFlow :nodes="nodes" :edges="edges" @node-click="onNodeClick">
       <Background pattern-color="#aaa" :gap="16" />
 
       <template #node-trigger="triggerNodeProps">
@@ -38,6 +44,7 @@ const { nodes, edges } = storeToRefs(store);
         <AddCommentNode v-bind="addCommentNodeProps" />
       </template>
     </VueFlow>
+    <RouterView />
   </div>
 </template>
 
