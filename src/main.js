@@ -3,6 +3,7 @@ import { createPinia } from "pinia";
 import { VueQueryPlugin } from "@tanstack/vue-query";
 import PrimeVue from "primevue/config";
 import Aura from "@primeuix/themes/aura";
+import ConfirmationService from "primevue/confirmationservice";
 import App from "./App.vue";
 import router from "./router";
 import "./style.css";
@@ -28,6 +29,7 @@ app.use(PrimeVue, {
     preset: Aura,
   },
 });
+app.use(ConfirmationService);
 app.use(VueQueryPlugin, vueQueryPluginOptions);
 app.use(pinia);
 app.use(router);

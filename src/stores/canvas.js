@@ -39,6 +39,7 @@ export const useCanvasStore = defineStore("canvas", () => {
     const node = nodes.value.find((n) => n.id === id);
     if (node) {
       node.data = { ...node.data, ...newData };
+      nodes.value = [...nodes.value];
     }
   }
 
@@ -47,11 +48,19 @@ export const useCanvasStore = defineStore("canvas", () => {
     edges.value = edges.value.filter((e) => e.source !== id && e.target !== id);
   }
 
+  function log() {
+    console.log({ nodes: nodes.value, edges: edges.value });
+  }
+
   watch(data, (newData) => {
     if (newData) {
       reset(newData);
     }
   });
+
+  function findNodeById(id) {
+    return nodes.value.find((n) => n.id === id);
+  }
 
   return {
     nodes,
@@ -61,5 +70,7 @@ export const useCanvasStore = defineStore("canvas", () => {
     reset,
     updateNodeData,
     removeNode,
+    findNodeById,
+    log,
   };
 });

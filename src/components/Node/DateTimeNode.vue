@@ -12,6 +12,9 @@ const props = defineProps({
     required: false,
   },
 });
+
+const tempDescription =
+  props.data?.description || `${props.data?.title} ${props.data?.timezone}`;
 </script>
 
 <template>
@@ -21,7 +24,9 @@ const props = defineProps({
       <Calendar1 class="w-4 h-4 ml-2 mr-2" />
       {{ data?.title }}
     </div>
-    <div class="text-gray-500 pt-1">{{ data?.title }} {{ data?.timezone }}</div>
+    <div class="text-gray-500 pt-1">
+      {{ data?.description || tempDescription }}
+    </div>
 
     <Handle type="source" :position="Position.Bottom" />
   </div>
