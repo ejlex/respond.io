@@ -13,7 +13,7 @@ import SendMessageNode from "./nodes/SendMessageNode.vue";
 import ControlPanel from "./ControlPanel.vue";
 
 const store = useCanvasStore();
-const { nodes, edges } = storeToRefs(store);
+const { nodes, edges, isLoading } = storeToRefs(store);
 const router = useRouter();
 const vueFlowInstance = ref(null);
 const { getSelectedNodes, getSelectedEdges } = useVueFlow();
@@ -112,6 +112,10 @@ watch(
 
 <template>
   <div class="flow-container dotted-background" aria-label="Workflow Diagram">
+    <div v-if="isLoading" class="loading-overlay">
+      <div class="spinner"></div>
+      Loading...
+    </div>
     <VueFlow
       :nodes="nodes"
       :edges="edges"
@@ -165,5 +169,40 @@ watch(
 .accessible-node:focus {
   outline: 2px solid #3b82f6;
   outline-offset: 4px;
+}
+
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3b82f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 10px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 </style>

@@ -7,7 +7,7 @@ export const useCanvasStore = defineStore("canvas", () => {
   const nodes = ref([]);
   const edges = ref([]);
 
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["assessments"],
     queryFn: () =>
       fetch(
@@ -151,5 +151,6 @@ export const useCanvasStore = defineStore("canvas", () => {
     historyIndex,
     history,
     updateNodePosition,
+    isLoading,
   };
 });
