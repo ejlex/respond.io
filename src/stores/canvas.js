@@ -10,7 +10,7 @@ export const useCanvasStore = defineStore("canvas", () => {
   const { data } = useQuery({
     queryKey: ["assessments"],
     queryFn: () =>
-      fetch("/api/candidate-assessments/payload.json")
+      fetch(VITE_API_BASE_URL + "/candidate-assessments/payload.json")
         .then((response) => response.json())
         .catch((error) => console.error(error)),
   });
@@ -32,6 +32,18 @@ export const useCanvasStore = defineStore("canvas", () => {
     }
   }
 
+  function updateNodeData(id, newData) {
+    const node = nodes.value.find((n) => n.id === id);
+    if (node) {
+      node.data = { ...node.data, ...newData };
+    }
+  }
+
+  function removeNode(id) {
+    nodes.value = nodes.value.filter((n) => n.id !== id);
+    edges.value = edges.value.filter((e) => e.source !== id && e.target !== id);
+  }
+
   watch(data, (newData) => {
     if (newData) {
       reset(newData);
@@ -44,5 +56,7 @@ export const useCanvasStore = defineStore("canvas", () => {
     setNodes,
     setEdges,
     reset,
+    updateNodeData,
+    removeNode,
   };
 });
