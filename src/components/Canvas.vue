@@ -9,6 +9,7 @@ import DateTimeNode from "./Node/DateTimeNode.vue";
 import ConnectorNode from "./Node/ConnectorNode.vue";
 import AddCommentNode from "./Node/AddCommentNode.vue";
 import SendMessageNode from "./Node/SendMessageNode.vue";
+import NodeCreator from "./NodeCreator.vue";
 
 const store = useCanvasStore();
 const { nodes, edges } = storeToRefs(store);
@@ -44,6 +45,8 @@ function onNodeClick({ node }) {
       <template #node-addComment="addCommentNodeProps">
         <AddCommentNode v-bind="addCommentNodeProps" />
       </template>
+
+      <NodeCreator />
     </VueFlow>
     <RouterView />
   </div>

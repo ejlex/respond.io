@@ -22,6 +22,10 @@ export const useCanvasStore = defineStore("canvas", () => {
     nodes.value = newNodes;
   }
 
+  function addNode(node) {
+    nodes.value = [...nodes.value, node];
+  }
+
   function setEdges(newEdges) {
     edges.value = newEdges;
   }
@@ -71,6 +75,7 @@ export const useCanvasStore = defineStore("canvas", () => {
     updateNodeData,
     removeNode,
     findNodeById,
+    addNode,
     log,
   };
 });
