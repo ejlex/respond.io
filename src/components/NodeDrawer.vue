@@ -48,8 +48,33 @@ watch(
   { immediate: true }
 );
 
+const isValid = computed(() => {
+  if (!node.value) return false;
+  if (!title.value.trim()) return false;
+
+  if (node.value.type === "sendMessage") {
+    const hasText = payload.value.some(
+      (item) => item.type === "text" && item.text
+    );
+    const hasAttachment = payload.value.some(
+      (item) => item.type === "attachment"
+    );
+    return hasText || hasAttachment;
+  }
+
+  if (node.value.type === "addComment") {
+    return !!comment.value;
+  }
+
+  if (node.value.type === "dateTime") {
+    return times.value.every((t) => t.startTime < t.endTime);
+  }
+
+  return true;
+});
+
 const save = () => {
-  if (node.value) {
+  if (node.value && isValid.value) {
     store.updateNodeData(nodeId.value, {
       title: title.value,
       description: description.value,
@@ -100,7 +125,10 @@ watch(visible, (val) => {
     <div v-if="node" class="flex flex-col gap-4">
       <div class="flex flex-col gap-2">
         <label for="title" class="font-semibold">Title</label>
-        <InputText id="title" v-model="title" fluid />
+        <InputText id="title" v-model="title" fluid :invalid="!title.trim()" />
+        <small v-if="!title.trim()" class="text-red-500"
+          >Title is required.</small
+        >
       </div>
 
       <div
@@ -129,7 +157,7 @@ watch(visible, (val) => {
       />
 
       <div class="mt-4 flex gap-2">
-        <Button label="Save" @click="save" fluid />
+        <Button label="Save" @click="save" fluid :disabled="!isValid" />
         <Button label="Delete" severity="danger" @click="remove" fluid />
       </div>
     </div>

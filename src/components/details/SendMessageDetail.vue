@@ -127,7 +127,11 @@ const removeAttachment = (index) => {
         rows="3"
         @input="emitUpdate"
         fluid
+        :invalid="!text && attachments.length === 0"
       />
+      <small v-if="!text && attachments.length === 0" class="text-red-500">
+        Message text is required if no attachment is added.
+      </small>
     </div>
   </div>
 </template>

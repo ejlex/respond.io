@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { Panel, useVueFlow } from "@vue-flow/core";
 import { useCanvasStore } from "../stores/canvas";
 import Button from "primevue/button";
@@ -33,6 +33,30 @@ const nodeTypes = [
   { label: "Business Hours", value: "dateTime" },
 ];
 
+const isValid = computed(() => {
+  if (!title.value.trim()) return false;
+
+  if (type.value === "sendMessage") {
+    const hasText = payload.value.some(
+      (item) => item.type === "text" && item.text
+    );
+    const hasAttachment = payload.value.some(
+      (item) => item.type === "attachment"
+    );
+    return hasText || hasAttachment;
+  }
+
+  if (type.value === "addComment") {
+    return !!comment.value;
+  }
+
+  if (type.value === "dateTime") {
+    return times.value.every((t) => t.startTime < t.endTime);
+  }
+
+  return true;
+});
+
 const openDrawer = () => {
   visible.value = true;
   // Reset fields
@@ -46,6 +70,8 @@ const openDrawer = () => {
 };
 
 const add = () => {
+  if (!isValid.value) return;
+
   const id = Date.now().toString();
 
   const newNode = {
@@ -152,7 +178,10 @@ const deleteSelected = () => {
 
       <div class="flex flex-col gap-2">
         <label class="font-semibold">Title</label>
-        <InputText v-model="title" fluid />
+        <InputText v-model="title" fluid :invalid="!title.trim()" />
+        <small v-if="!title.trim()" class="text-red-500"
+          >Title is required.</small
+        >
       </div>
 
       <div
@@ -173,7 +202,7 @@ const deleteSelected = () => {
       />
 
       <div class="mt-4">
-        <Button label="Create Node" @click="add" fluid />
+        <Button label="Create Node" @click="add" fluid :disabled="!isValid" />
       </div>
     </div>
   </Drawer>

@@ -20,6 +20,8 @@ const emit = defineEmits(["update:modelValue"]);
       @update:model-value="emit('update:modelValue', $event)"
       rows="5"
       fluid
+      :invalid="!modelValue"
     />
+    <small v-if="!modelValue" class="text-red-500">Comment is required.</small>
   </div>
 </template>

@@ -70,20 +70,41 @@ const emitUpdate = () => {
 
       <template v-for="day in days" :key="day">
         <div class="font-bold text-sm">{{ dayLabels[day] }}</div>
-        <div class="flex items-center gap-2">
-          <input
-            type="time"
-            v-model="localTimes.find((t) => t.day === day).startTime"
-            @change="emitUpdate"
-            class="border rounded px-2 py-1 text-sm w-24"
-          />
-          <span class="text-gray-400 text-xs">to</span>
-          <input
-            type="time"
-            v-model="localTimes.find((t) => t.day === day).endTime"
-            @change="emitUpdate"
-            class="border rounded px-2 py-1 text-sm w-24"
-          />
+        <div class="flex flex-col gap-1">
+          <div class="flex items-center gap-2">
+            <input
+              type="time"
+              v-model="localTimes.find((t) => t.day === day).startTime"
+              @change="emitUpdate"
+              class="border rounded px-2 py-1 text-sm w-24"
+              :class="{
+                'border-red-500':
+                  localTimes.find((t) => t.day === day).startTime >=
+                  localTimes.find((t) => t.day === day).endTime,
+              }"
+            />
+            <span class="text-gray-400 text-xs">to</span>
+            <input
+              type="time"
+              v-model="localTimes.find((t) => t.day === day).endTime"
+              @change="emitUpdate"
+              class="border rounded px-2 py-1 text-sm w-24"
+              :class="{
+                'border-red-500':
+                  localTimes.find((t) => t.day === day).startTime >=
+                  localTimes.find((t) => t.day === day).endTime,
+              }"
+            />
+          </div>
+          <small
+            v-if="
+              localTimes.find((t) => t.day === day).startTime >=
+              localTimes.find((t) => t.day === day).endTime
+            "
+            class="text-red-500 text-xs"
+          >
+            Start time must be before end time.
+          </small>
         </div>
       </template>
     </div>
