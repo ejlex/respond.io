@@ -5,12 +5,12 @@ import { storeToRefs } from "pinia";
 import { VueFlow, useVueFlow, useKeyPress } from "@vue-flow/core";
 import { Background } from "@vue-flow/background";
 import { useCanvasStore } from "../stores/canvas";
-import TriggerNode from "./Node/TriggerNode.vue";
-import DateTimeNode from "./Node/DateTimeNode.vue";
-import ConnectorNode from "./Node/ConnectorNode.vue";
-import AddCommentNode from "./Node/AddCommentNode.vue";
-import SendMessageNode from "./Node/SendMessageNode.vue";
-import NodeCreator from "./NodeCreator.vue";
+import TriggerNode from "./node/TriggerNode.vue";
+import DateTimeNode from "./node/DateTimeNode.vue";
+import ConnectorNode from "./node/ConnectorNode.vue";
+import AddCommentNode from "./node/AddCommentNode.vue";
+import SendMessageNode from "./node/SendMessageNode.vue";
+import ControlPanel from "./ControlPanel.vue";
 
 const store = useCanvasStore();
 const { nodes, edges } = storeToRefs(store);
@@ -144,7 +144,7 @@ watch(
         <AddCommentNode v-bind="addCommentNodeProps" />
       </template>
 
-      <NodeCreator />
+      <ControlPanel />
     </VueFlow>
     <RouterView />
   </div>
