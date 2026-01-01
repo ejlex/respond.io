@@ -1,6 +1,5 @@
 <script setup>
 import { ref, watch } from "vue";
-import Button from "primevue/button";
 import Textarea from "primevue/textarea";
 import { X } from "lucide-vue-next";
 

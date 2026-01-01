@@ -45,7 +45,10 @@ export const transformData = (rawData) => {
       id,
       type: rawNode.type,
       position: { x, y: level * 180 },
-      data: { title: rawNode.name, ...rawNode.data },
+      data: {
+        ...defaultValue(rawNode.type, rawNode.name, rawNode.data),
+        ...rawNode.data,
+      },
     });
 
     // 5. Recursive child placement
@@ -75,4 +78,38 @@ export const transformData = (rawData) => {
 
   if (rootId) positionNode(rootId, 0, 350); // Start root at a comfortable X
   return { nodes: finalNodes, edges: finalEdges };
+};
+
+const defaultValue = (type, name, data) => {
+  const { timezone, title, description } = data;
+  let newTitle = "";
+  let newDescription = "";
+
+  switch (type) {
+    case "trigger":
+      newTitle = title || name || "Trigger Node";
+      newDescription = description || "Conversation Opened";
+      break;
+    case "dateTime":
+      newTitle = title || name || "Business Hours";
+      newDescription = `${newTitle} ${timezone}`;
+      break;
+    case "addComment":
+      newTitle = title || name || "Add Comment Node";
+      newDescription = description || "";
+      break;
+    case "sendMessage":
+      newTitle = title || name || "Send Message Node";
+      newDescription = description || "";
+      break;
+    default:
+      newTitle = title || name || "";
+      newDescription = description || "";
+      break;
+  }
+
+  return {
+    title: newTitle,
+    description: newDescription,
+  };
 };
