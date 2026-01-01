@@ -10,7 +10,7 @@ import Drawer from "primevue/drawer";
 import SendMessageDetail from "./details/SendMessageDetail.vue";
 import AddCommentDetail from "./details/AddCommentDetail.vue";
 import DateTimeDetail from "./details/DateTimeDetail.vue";
-import { Plus, RotateCcw, Trash2 } from "lucide-vue-next";
+import { Plus, RotateCcw, Trash2, Undo2, Redo2 } from "lucide-vue-next";
 import ConfirmDialog from "primevue/confirmdialog";
 import { useConfirm } from "primevue/useconfirm";
 
@@ -155,6 +155,22 @@ const deleteSelected = () => {
     </Button>
     <Button @click="openDrawer" size="small">
       <Plus class="w-5 h-5" /> Add New Node
+    </Button>
+    <Button
+      @click="store.undo"
+      :disabled="store.historyIndex <= 0"
+      severity="info"
+      size="small"
+    >
+      <Undo2 class="w-5 h-5" />
+    </Button>
+    <Button
+      @click="store.redo"
+      :disabled="store.historyIndex >= store.history.length - 1"
+      severity="info"
+      size="small"
+    >
+      <Redo2 class="w-5 h-5" />
     </Button>
   </Panel>
 

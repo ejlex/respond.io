@@ -19,10 +19,9 @@ const props = defineProps({
 });
 
 const store = useCanvasStore();
-const { addSelectedNodes, resetSelectedNodes } = useVueFlow();
+const { addSelectedNodes } = useVueFlow();
 
 function onFocus() {
-  resetSelectedNodes();
   addSelectedNodes([props.id]);
 }
 

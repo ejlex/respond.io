@@ -4,6 +4,7 @@ import { VueQueryPlugin } from "@tanstack/vue-query";
 import PrimeVue from "primevue/config";
 import Aura from "@primeuix/themes/aura";
 import ConfirmationService from "primevue/confirmationservice";
+import Tooltip from "primevue/tooltip";
 import App from "./App.vue";
 import router from "./router";
 import "./style.css";
@@ -30,6 +31,7 @@ app.use(PrimeVue, {
   },
 });
 app.use(ConfirmationService);
+app.directive("tooltip", Tooltip);
 app.use(VueQueryPlugin, vueQueryPluginOptions);
 app.use(pinia);
 app.use(router);

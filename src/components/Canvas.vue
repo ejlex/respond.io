@@ -48,25 +48,33 @@ const isUp = useKeyPress("ArrowUp");
 const isDown = useKeyPress("ArrowDown");
 const isLeft = useKeyPress("ArrowLeft");
 const isRight = useKeyPress("ArrowRight");
-const isShift = useKeyPress("Shift");
 
 function moveNodes(xOffset, yOffset) {
   const nodes = getSelectedNodes.value;
   if (!nodes.length) return;
-  const moveStep = isShift.value ? 10 : 1;
 
   nodes.forEach((node) => {
-    node.position = {
+    const newPos = {
       x: node.position.x + xOffset * moveStep,
       y: node.position.y + yOffset * moveStep,
     };
+    node.position = newPos;
+    store.updateNodePosition(node.id, newPos);
   });
+  store.addToHistory();
 }
 
 watch(isUp, (v) => v && moveNodes(0, -1));
 watch(isDown, (v) => v && moveNodes(0, 1));
 watch(isLeft, (v) => v && moveNodes(-1, 0));
 watch(isRight, (v) => v && moveNodes(1, 0));
+
+function onNodeDragStop({ nodes: draggedNodes }) {
+  draggedNodes.forEach((node) => {
+    store.updateNodePosition(node.id, node.position);
+  });
+  store.addToHistory();
+}
 
 const isEnter = useKeyPress("Enter");
 const isDelete = useKeyPress("Delete");
@@ -108,9 +116,9 @@ watch(
       @node-click="onNodeClick"
       @connect="onConnect"
       @pane-ready="onPaneReady"
+      @node-drag-stop="onNodeDragStop"
       fit-view-on-init
       :keyboard-shortcuts="true"
-      :selection-key-code="'Shift'"
       :multi-selection-key-code="'Control'"
       aria-live="polite"
     >
