@@ -49,6 +49,8 @@ const isDown = useKeyPress("ArrowDown");
 const isLeft = useKeyPress("ArrowLeft");
 const isRight = useKeyPress("ArrowRight");
 
+const moveStep = 5;
+
 function moveNodes(xOffset, yOffset) {
   const nodes = getSelectedNodes.value;
   if (!nodes.length) return;
