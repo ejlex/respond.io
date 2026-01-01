@@ -5,11 +5,11 @@ import { storeToRefs } from "pinia";
 import { VueFlow, useVueFlow, useKeyPress } from "@vue-flow/core";
 import { Background } from "@vue-flow/background";
 import { useCanvasStore } from "../stores/canvas";
-import TriggerNode from "./node/TriggerNode.vue";
-import DateTimeNode from "./node/DateTimeNode.vue";
-import ConnectorNode from "./node/ConnectorNode.vue";
-import AddCommentNode from "./node/AddCommentNode.vue";
-import SendMessageNode from "./node/SendMessageNode.vue";
+import TriggerNode from "./nodes/TriggerNode.vue";
+import DateTimeNode from "./nodes/DateTimeNode.vue";
+import ConnectorNode from "./nodes/ConnectorNode.vue";
+import AddCommentNode from "./nodes/AddCommentNode.vue";
+import SendMessageNode from "./nodes/SendMessageNode.vue";
 import ControlPanel from "./ControlPanel.vue";
 
 const store = useCanvasStore();
